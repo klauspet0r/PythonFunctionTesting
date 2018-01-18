@@ -24,6 +24,3 @@ for entry in json_object.get("Dependencies").get("Parameters"):
         print "Parameterset exsists in DB"
     elif q_result[0][0] == 0:
         print "Parameterset NOT in DB"
-
-
-
