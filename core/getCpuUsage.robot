@@ -1,0 +1,23 @@
+*** Settings ***
+ 
+ Library  MqttConnectionHandler
+ Library  MqttValidateCommandResponse
+ 
+ 
+*** Variables ***
+${mqtthost}      10.0.0.19
+${mqttport}      1883
+${publish_topic}      RobotFw/system/monitor/in
+${subscribe_topic}      RobotFw/system/monitor/out
+${command_name}    getCpuUsage
+${data}  {}
+${json_schema}  {"definitions":{},"$schema":"http://json-schema.org/draft-04/schema#","id":"http://ml-pa.com/m2cp.json","type":"object","properties":{"Type":{"id":"/properties/Type","type":"string","title":"The Type Schema.","description":"An explanation about the purpose of this instance.","default":""},"Name":{"id":"/properties/Name","type":"string","title":"The Name Schema.","description":"An explanation about the purpose of this instance.","default":""},"Data":{"id":"/properties/Data","type":"object","properties":{"ResponseValue":{"id":"/properties/Data/properties/ResponseValue","type":"object","properties":{"Levels":{"id":"/properties/Data/properties/ResponseValue/properties/Levels","type":"array","items":{"id":"/properties/Data/properties/ResponseValue/properties/Levels/items","type":"object","properties":{"standardLevel":{"id":"/properties/Data/properties/ResponseValue/properties/Levels/items/properties/standardLevel","type":"string","title":"The Standardlevel Schema.","description":"An explanation about the purpose of this instance.","default":""},"declaringClass":{"id":"/properties/Data/properties/ResponseValue/properties/Levels/items/properties/declaringClass","type":"string","title":"The Declaringclass Schema.","description":"An explanation about the purpose of this instance.","default":""}}}}}},"ResultType":{"id":"/properties/Data/properties/ResultType","type":"string","title":"The Resulttype Schema.","description":"An explanation about the purpose of this instance.","default":""}}},"Tag":{"id":"/properties/Tag","type":"string","title":"The Tag Schema.","description":"An explanation about the purpose of this instance.","default":""},"TimeStamp":{"id":"/properties/TimeStamp","type":"integer","title":"The Timestamp Schema.","description":"An explanation about the purpose of this instance.","default":0}}}
+${result_type}  SUCCESS
+${data_payload_schema}  {"definitions":{},"$schema":"http://json-schema.org/draft-06/schema#","$id":"http://ml-pa.com/m2cp.json","type":"object","properties":{"Type":{"$id":"/properties/Type","type":"string","title":"The Type Schema","description":"An explanation about the purpose of this instance.","default":"","examples":["RESPONSE"]},"Name":{"$id":"/properties/Name","type":"string","title":"The Name Schema","description":"An explanation about the purpose of this instance.","default":"","examples":["getSupportStatus"]},"Data":{"$id":"/properties/Data","type":"object","properties":{"ResponseValue":{"$id":"/properties/Data/properties/ResponseValue","type":"object","properties":{"Message":{"$id":"/properties/Data/properties/ResponseValue/properties/Message","type":"string","title":"The Message Schema","description":"An explanation about the purpose of this instance.","default":"","examples":["No Support Console is Running"]},"TargetHost":{"$id":"/properties/Data/properties/ResponseValue/properties/TargetHost","type":"string","title":"The Targethost Schema","description":"An explanation about the purpose of this instance.","default":"","examples":[""]},"TargetPort":{"$id":"/properties/Data/properties/ResponseValue/properties/TargetPort","type":"integer","title":"The Targetport Schema","description":"An explanation about the purpose of this instance.","default":0,"examples":[0]}}},"ResultType":{"$id":"/properties/Data/properties/ResultType","type":"string","title":"The Resulttype Schema","description":"An explanation about the purpose of this instance.","default":"","examples":["SUCCESS"]}}},"Tag":{"$id":"/properties/Tag","type":"string","title":"The Tag Schema","description":"An explanation about the purpose of this instance.","default":"","examples":["11111111-1111-1111-1111-111111111111"]},"TimeStamp":{"$id":"/properties/TimeStamp","type":"integer","title":"The Timestamp Schema","description":"An explanation about the purpose of this instance.","default":0,"examples":[1515403263813]}}}
+
+*** Test Cases ***
+Test Mqtt-Command
+  ${mqtt_client}  Connect  ${mqtthost}  ${mqttport}
+  ${data_payload}  Validate Command Response  ${mqtt_client}  ${command_name}  ${data}  ${publish_topic}  ${subscribe_topic}  ${result_type}  ${json_schema}   
+  Validate Payload   ${data_payload}  ${data_payload_schema}                  
+  [Teardown]  Disconnect
