@@ -1,0 +1,1 @@
+{"messaging": {"roottopic": {"2": "RootTopic"}, "host": {"2": "127.0.0.1"}, "command": {"0": "json_schema_command"}, "response": {"1": "json_schema_response"}, "port": {"3": "1883"}}}
