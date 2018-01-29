@@ -6,4 +6,9 @@ json_object = json.loads(json_string)
 
 content_to_check_for = 'No Support Console is Running'
     
-print content_to_check_for in json_object['Data'].get('ResponseValue').values()
+for entry in json_object['Data']:
+    if isinstance(json_object['Data'].get(entry), dict):
+        sub_dict =  json_object['Data'].get(entry)
+        print content_to_check_for in sub_dict.values()                                                        
+    else:        
+        print content_to_check_for in json_object['Data'].values()
