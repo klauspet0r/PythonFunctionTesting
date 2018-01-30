@@ -5,8 +5,7 @@ payload = json.loads('{"Type":"RESPONSE","Name":"getSupportStatus","Data":{"Resp
 payload_match = json.loads('{"Data":{"ResponseValue":{"Message":"No Support Console is Running"}}}')
 
 
-def match_dicts(small, big):
-    print small, big
+def match_dicts(small, big):    
     if type(big) != type(small):
         return False
     if type(small) != dict:
