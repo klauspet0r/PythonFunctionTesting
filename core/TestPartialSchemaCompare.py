@@ -1,29 +1,44 @@
 import json
+from logzero import logger
+
+logger.info('Importing payload')
+
+# payload = '{"Type":"RESPONSE","Name":"applyConfiguration","Data":{"ResponseValue":{"ReconfiguredModules":["OpcUaConnector"],"ConfigurationType":"DELTA","ModuleConfigurationData":[{"ConfigurationData":{"OpcUa":{"Host":"10.0.0.24","Port":48010,"ServerName":"","Security":"NONE","MessageSecurityMode":"None","RequestedPublishingIntervalMs":10000,"MaxQueueSize":10,"MaxNotificationsPerPublish":1000},"Variables":[{"Identifier":"Demo.Dynamic.Scalar.Boolean","Namespace":"http://www.unifiedautomation.com/DemoServer/","IdType":"String","UpdateIntervalMs":10000}],"PayloadFormat":"{\n  \"Id\": \"<variableId>\",\n  \"Value\": \"<value>\",\n  \"Timestamp\": \"<timestamp>\",\n  \"TimestampSend\": \"<timestampSend>\"\n}"},"ConfigurationVersion":"0.1","ModuleName":"OpcUaConnector"}]},"ResultType":"SUCCESS"},"Tag":"11111111-1111-1111-1111-111111111111","TimeStamp":1517418942169}'
+
+payload = '{"Data":{"ResponseValue":{"ModuleConfiguration":{"ConfigurationData":{"OpcUa":{"Host":"10.0.0.24","Port":48010,"ServerName":"","Security":"NONE","MessageSecurityMode":"None","RequestedPublishingIntervalMs":10000,"MaxQueueSize":10,"MaxNotificationsPerPublish":1000}}}}}}'
+
+logger.info('setting up extractor')
+
+extractor = []
+
+extractor.append('Data')
+
+extractor.append('ResponseValue')
+extractor.append('ModuleConfigurationData')
+extractor.append('ConfigurationData')
+extractor.append('OpcUa')
+
+json_pl = json.loads(payload)
 
 
-payload = '{"Type":"RESPONSE","Name":"getSupportStatus","Data":{"ResponseValue":{"Message":"No Support Console is Running","TargetHost":"","TargetPort":0},"ResultType":"SUCCESS"},"Tag":"46528925-6021-3438-9773-997055251222","TimeStamp":1517239324927}'
-
-payload_match = '{"Data":{"ResponseValue":{"Message":"No Support Console is Running"}}}'
 
 
-def check_content(small, big):
-        small_json = json.loads(small)
-        big_json = json.loads(big)        
-    
-        def match_dicts(small,big):    
-            if type(big) != type(small):
-                return False
-            if type(small) != dict:
-                return (small == big)
-            for key in big.keys():        
-                if key == small.keys()[0]:     
-                    if match_dicts(small[key],big[key]) or match_dicts(small,big[key]):
-                        return True
-                    else:
-                        continue
-            return False
+# json_schema = """"""
+
+
+# def unpack_json(json_string, key):
+#     json_dict = json.loads(json_string)
+#     return json.dumps(json_dict[key])
+# 
+# for key in extractor:        
+#     print unpack_json(payload, key)        
+                        
+
         
-        return match_dicts(small_json, big_json)
-            
-            
-print check_content(payload_match, payload)                 
+        
+        
+
+    
+    
+
+    
