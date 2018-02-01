@@ -1,5 +1,6 @@
 import json
 from logzero import logger
+from jsonschema import validate
 
 # payload = '{"Type":"RESPONSE","Name":"applyConfiguration","Data":{"ResponseValue":{"ReconfiguredModules":["OpcUaConnector"],"ConfigurationType":"DELTA","ModuleConfigurationData":[{"ConfigurationData":{"OpcUa":{"Host":"10.0.0.24","Port":48010,"ServerName":"","Security":"NONE","MessageSecurityMode":"None","RequestedPublishingIntervalMs":10000,"MaxQueueSize":10,"MaxNotificationsPerPublish":1000},"Variables":[{"Identifier":"Demo.Dynamic.Scalar.Boolean","Namespace":"http://www.unifiedautomation.com/DemoServer/","IdType":"String","UpdateIntervalMs":10000}],"PayloadFormat":"{\n  \"Id\": \"<variableId>\",\n  \"Value\": \"<value>\",\n  \"Timestamp\": \"<timestamp>\",\n  \"TimestampSend\": \"<timestampSend>\"\n}"},"ConfigurationVersion":"0.1","ModuleName":"OpcUaConnector"}]},"ResultType":"SUCCESS"},"Tag":"11111111-1111-1111-1111-111111111111","TimeStamp":1517418942169}'
 
@@ -29,10 +30,7 @@ json_schema = """{"$schema":"http://json-schema.org/draft-04/schema#","title":
                     "required":["ServerName","RequestedPublishingIntervalMs",
                     "Host","MaxQueueSize","MessageSecurityMode","Security",
                     "Port","MaxNotificationsPerPublish"]}"""
-
-
-
-
+                    
 def extract_sub_dict(js, extractor):
     jo = json.loads(js)
     sjonm1 = None        
@@ -64,8 +62,9 @@ def unpack_json_string(js,extractor):
 print unpack_json_string(payload, extractor)
 
 
-            
+print validate(json.loads(unpack_json_string(payload, extractor)), json.loads(json_schema)) 
 
 
 
-    
+
+
