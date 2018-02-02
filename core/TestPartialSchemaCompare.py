@@ -4,18 +4,49 @@ from jsonschema import validate
 
 # payload = '{"Type":"RESPONSE","Name":"applyConfiguration","Data":{"ResponseValue":{"ReconfiguredModules":["OpcUaConnector"],"ConfigurationType":"DELTA","ModuleConfigurationData":[{"ConfigurationData":{"OpcUa":{"Host":"10.0.0.24","Port":48010,"ServerName":"","Security":"NONE","MessageSecurityMode":"None","RequestedPublishingIntervalMs":10000,"MaxQueueSize":10,"MaxNotificationsPerPublish":1000},"Variables":[{"Identifier":"Demo.Dynamic.Scalar.Boolean","Namespace":"http://www.unifiedautomation.com/DemoServer/","IdType":"String","UpdateIntervalMs":10000}],"PayloadFormat":"{\n  \"Id\": \"<variableId>\",\n  \"Value\": \"<value>\",\n  \"Timestamp\": \"<timestamp>\",\n  \"TimestampSend\": \"<timestampSend>\"\n}"},"ConfigurationVersion":"0.1","ModuleName":"OpcUaConnector"}]},"ResultType":"SUCCESS"},"Tag":"11111111-1111-1111-1111-111111111111","TimeStamp":1517418942169}'
 
-payload = """{"Data":{"ResponseValue":{"ModuleConfiguration":{"ConfigurationData":
-                {"OpcUa":{"Host":"10.0.0.24","Port":48010,"ServerName":"",
-                "Security":"NONE","MessageSecurityMode":"None",
-                "RequestedPublishingIntervalMs":10000,"MaxQueueSize":10,
-                "MaxNotificationsPerPublish":1000}}}}}}"""
+payload = """{
+  "Type" : "RESPONSE",
+  "Name" : "applyConfiguration",
+  "Data" : {
+    "ResponseValue" : {
+      "ReconfiguredModules" : [ "OpcUaConnector" ],
+      "ConfigurationType" : "DELTA",
+      "ModuleConfigurationData" : [ {
+        "ConfigurationData" : {
+          "OpcUa" : {
+            "Host" : "10.0.0.24",
+            "Port" : 48010,
+            "ServerName" : "",
+            "Security" : "NONE",
+            "MessageSecurityMode" : "None",
+            "RequestedPublishingIntervalMs" : 10000,
+            "MaxQueueSize" : 10,
+            "MaxNotificationsPerPublish" : 1000
+          },
+          "Variables" : [ {
+            "Identifier" : "Demo.Dynamic.Scalar.Boolean",
+            "Namespace" : "http://www.unifiedautomation.com/DemoServer/",
+            "IdType" : "String",
+            "UpdateIntervalMs" : 10000
+          } ],
+          "PayloadFormat" : ""
+        },
+        "ConfigurationVersion" : "0.1",
+        "ModuleName" : "OpcUaConnector"
+      } ]
+    },
+    "ResultType" : "SUCCESS"
+  },
+  "Tag" : "11111111-1111-1111-1111-111111111111",
+  "TimeStamp" : 1517502019178
+}"""
 
 
 
 extractor = []
 extractor.append('Data')
 extractor.append('ResponseValue')
-extractor.append('ModuleConfiguration')
+extractor.append('ModuleConfigurationData')
 extractor.append('ConfigurationData')
 extractor.append('OpcUa')
 
@@ -35,34 +66,41 @@ def extract_sub_dict(js, extractor):
     jo = json.loads(js)
     sjonm1 = None        
     for k in extractor:
+        print k
         if sjonm1 == None:
-            sjo = jo[k]                                    
+            if type(jo) == list:
+                sjo = jo[0][k]
+            else:
+                sjo = jo[k]                                    
         else:
-            sjo = sjonm1[k]            
+            if type(sjonm1) == list:
+                sjo = sjonm1[0][k]
+            else:
+                sjo = sjonm1[k]  
         sjonm1 = sjo
                          
     return json.dumps(sjo)
 
 print extract_sub_dict(payload,extractor)
 
-def unpack_json_string(js,extractor):        
-    def unpack_json_object(_jo,_extractor):        
-        if len(_extractor) == 1:
-            return _jo[_extractor[0]]
-        elif len(_extractor) == 0:
-            print 'verkackt'
-            return None
-        else:
-            return unpack_json_object(_jo[_extractor[0]], _extractor[1:])
+# def unpack_json_string(js,extractor):        
+#     def unpack_json_object(_jo,_extractor):        
+#         if len(_extractor) == 1:
+#             return _jo[_extractor[0]]
+#         elif len(_extractor) == 0:
+#             print 'verkackt'
+#             return None
+#         else:
+#             return unpack_json_object(_jo[_extractor[0]] if type(_jo) == dict else _jo[0][_extractor[0]], _extractor[1:])
+#  
+#     jo = json.loads(js)
+#     return json.dumps(unpack_json_object(jo, extractor))
+#  
+#  
+# print unpack_json_string(payload, extractor)
 
-    jo = json.loads(js)
-    return json.dumps(unpack_json_object(jo, extractor))
 
-
-print unpack_json_string(payload, extractor)
-
-
-print validate(json.loads(unpack_json_string(payload, extractor)), json.loads(json_schema)) 
+print validate(json.loads(extract_sub_dict(payload, extractor)), json.loads(json_schema)) 
 
 
 
