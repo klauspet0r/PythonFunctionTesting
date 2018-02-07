@@ -1,8 +1,5 @@
 import json
-from logzero import logger
 from jsonschema import validate
-
-# payload = '{"Type":"RESPONSE","Name":"applyConfiguration","Data":{"ResponseValue":{"ReconfiguredModules":["OpcUaConnector"],"ConfigurationType":"DELTA","ModuleConfigurationData":[{"ConfigurationData":{"OpcUa":{"Host":"10.0.0.24","Port":48010,"ServerName":"","Security":"NONE","MessageSecurityMode":"None","RequestedPublishingIntervalMs":10000,"MaxQueueSize":10,"MaxNotificationsPerPublish":1000},"Variables":[{"Identifier":"Demo.Dynamic.Scalar.Boolean","Namespace":"http://www.unifiedautomation.com/DemoServer/","IdType":"String","UpdateIntervalMs":10000}],"PayloadFormat":"{\n  \"Id\": \"<variableId>\",\n  \"Value\": \"<value>\",\n  \"Timestamp\": \"<timestamp>\",\n  \"TimestampSend\": \"<timestampSend>\"\n}"},"ConfigurationVersion":"0.1","ModuleName":"OpcUaConnector"}]},"ResultType":"SUCCESS"},"Tag":"11111111-1111-1111-1111-111111111111","TimeStamp":1517418942169}'
 
 payload = """{
   "Type": "RESPONSE",
@@ -10,248 +7,418 @@ payload = """{
   "Data": {
     "ResponseValue": {
       "ReconfiguredModules": [
-        "OpcUaConnector",
-        "DeviceLogger",
         "Uplink"
       ],
       "ConfigurationType": "DELTA",
-      "ModuleConfigurationData": [                
-        {
-          "ConfigurationData": {
-            "Variables": [
-              {
-                "UpdateIntervalMs": 10000,
-                "IdType": "String",
-                "Identifier": "",
-                "Namespace": ""
-              }
-            ],
-            "PayloadFormat": "",
-            "OpcUa": {
-              "ServerName": "",
-              "RequestedPublishingIntervalMs": 10000,
-              "Host": "10.0.0.24",
-              "MaxQueueSize": 10,
-              "MessageSecurityMode": "None",
-              "Security": "NONE",
-              "Port": 48010,
-              "MaxNotificationsPerPublish": 1000
-            }
-          },
-          "ConfigurationVersion": "0.1",
-          "ModuleName": "OpcUaConnector"
-        },        
+      "ModuleConfigurationData": [
         {
           "ConfigurationData": {
             "MqttEndpoints": [
               {
-                "QoS": 1,
-                "AuthenticationType": "None",
+                "MqttDestinationName": "DefaultLocalHost",
+                "ClientId": "client",
+                "MinimalSendIntervalMs": 1,
+                "Port": 1883,
                 "KeepAliveInterval": 2000,
+                "QoS": 1,
+                "Host": "192.0.0.1",
+                "RootTopic": "client",
+                "AuthenticationType": "None",
                 "Authentication": {
                   "UserName": "",
-                  "UseSsl": false,
-                  "RootCert": "",
+                  "Password": "",
                   "DeviceKey": "",
                   "DeviceId": "",
+                  "ExpiryTimeSeconds": 300,
+                  "UseSsl": false,
+                  "RootCert": "",
                   "UserCert": "",
-                  "UserKey": "",
-                  "Password": "",
-                  "ExpiryTimeSeconds": 300
+                  "UserKey": ""
                 },
-                "ClientId": "client",
                 "TopicMappings": {
                   "DeviceInput": [
                     {
-                      "BrokerTopic": "device/configuration/in",
-                      "DeviceTopic": "device/configuration"
+                      "DeviceTopic": "device/configuration",
+                      "BrokerTopic": "device/configuration/in"
                     },
                     {
-                      "BrokerTopic": "device/information/in",
-                      "DeviceTopic": "device/information"
+                      "DeviceTopic": "device/information",
+                      "BrokerTopic": "device/information/in"
                     },
                     {
-                      "BrokerTopic": "system/modules/in",
-                      "DeviceTopic": "system/modules"
+                      "DeviceTopic": "system/modules",
+                      "BrokerTopic": "system/modules/in"
                     },
                     {
-                      "BrokerTopic": "system/network/in",
-                      "DeviceTopic": "system/network"
+                      "DeviceTopic": "system/network",
+                      "BrokerTopic": "system/network/in"
                     },
                     {
-                      "BrokerTopic": "system/control/in",
-                      "DeviceTopic": "system/control"
+                      "DeviceTopic": "system/control",
+                      "BrokerTopic": "system/control/in"
                     },
                     {
-                      "BrokerTopic": "device/log/in",
-                      "DeviceTopic": "device/log"
+                      "DeviceTopic": "device/log",
+                      "BrokerTopic": "device/log/in"
                     },
                     {
-                      "BrokerTopic": "system/monitor/in",
-                      "DeviceTopic": "system/monitor"
+                      "DeviceTopic": "system/monitor",
+                      "BrokerTopic": "system/monitor/in"
                     },
                     {
-                      "BrokerTopic": "dataconnector/opcua/in",
-                      "DeviceTopic": "dataconnector/opcua"
+                      "DeviceTopic": "dataconnector/opcua",
+                      "BrokerTopic": "dataconnector/opcua/in"
                     },
                     {
-                      "BrokerTopic": "system/support/in",
-                      "DeviceTopic": "system/support"
+                      "DeviceTopic": "system/support",
+                      "BrokerTopic": "system/support/in"
                     }
                   ],
                   "DeviceOutput": [
                     {
-                      "BrokerTopic": "device/configuration/out",
-                      "DeviceTopic": "device/configuration"
+                      "DeviceTopic": "device/configuration",
+                      "BrokerTopic": "device/configuration/out"
                     },
                     {
-                      "BrokerTopic": "device/information/out",
-                      "DeviceTopic": "device/information"
+                      "DeviceTopic": "device/information",
+                      "BrokerTopic": "device/information/out"
                     },
                     {
-                      "BrokerTopic": "system/modules/out",
-                      "DeviceTopic": "system/modules"
+                      "DeviceTopic": "system/modules",
+                      "BrokerTopic": "system/modules/out"
                     },
                     {
-                      "BrokerTopic": "system/network/out",
-                      "DeviceTopic": "system/network"
+                      "DeviceTopic": "system/network",
+                      "BrokerTopic": "system/network/out"
                     },
                     {
-                      "BrokerTopic": "device/log/out",
-                      "DeviceTopic": "device/log"
+                      "DeviceTopic": "device/log",
+                      "BrokerTopic": "device/log/out"
                     },
                     {
-                      "BrokerTopic": "system/control/out",
-                      "DeviceTopic": "system/control"
+                      "DeviceTopic": "system/control",
+                      "BrokerTopic": "system/control/out"
                     },
                     {
-                      "BrokerTopic": "system/monitor/out",
-                      "DeviceTopic": "system/monitor"
+                      "DeviceTopic": "system/monitor",
+                      "BrokerTopic": "system/monitor/out"
                     },
                     {
-                      "BrokerTopic": "dataconnector/opcua/out",
-                      "DeviceTopic": "dataconnector/opcua"
+                      "DeviceTopic": "dataconnector/opcua",
+                      "BrokerTopic": "dataconnector/opcua/out"
                     },
                     {
-                      "BrokerTopic": "system/support/out",
-                      "DeviceTopic": "system/support"
+                      "DeviceTopic": "system/support",
+                      "BrokerTopic": "system/support/out"
                     },
                     {
-                      "BrokerTopic": "log",
-                      "DeviceTopic": "log"
+                      "DeviceTopic": "log",
+                      "BrokerTopic": "log"
                     },
                     {
-                      "BrokerTopic": "data",
-                      "DeviceTopic": "data/#"
+                      "DeviceTopic": "data/#",
+                      "BrokerTopic": "data"
                     },
                     {
-                      "BrokerTopic": "data",
-                      "DeviceTopic": "data"
+                      "DeviceTopic": "data",
+                      "BrokerTopic": "data"
                     },
                     {
-                      "BrokerTopic": "heartbeat",
-                      "DeviceTopic": "heartbeat"
+                      "DeviceTopic": "heartbeat",
+                      "BrokerTopic": "heartbeat"
                     }
                   ]
-                },
+                }
+              },
+              {
+                "MqttDestinationName": "AzureIotHub",
+                "ClientId": "igusSmartChain2",
                 "MinimalSendIntervalMs": 1,
-                "Host": "192.0.0.1",
-                "RootTopic": "client",
-                "MqttDestinationName": "DefaultLocalHost",
-                "Port": 1883
+                "Port": 8883,
+                "KeepAliveInterval": 2000,
+                "QoS": 1,
+                "Host": "MichalsSmartChainHub.azure-devices.net",
+                "RootTopic": "devices/igusSmartChain2/messages/events/",
+                "AuthenticationType": "AzureSasCredentials",
+                "Authentication": {
+                  "UserName": "MichalsSmartChainHub.azure-devices.net/igusSmartChain2",
+                  "Password": "",
+                  "DeviceKey": "aL/MV7GhPLIe1V/7ckVcJSrJXI8fyI2w4Az3Wvcp70k=",
+                  "DeviceId": "igusSmartChain2",
+                  "ExpiryTimeSeconds": 300,
+                  "UseSsl": true,
+                  "RootCert": "",
+                  "UserCert": "",
+                  "UserKey": ""
+                },
+                "TopicMappings": {
+                  "DeviceInput": [
+                    {
+                      "DeviceTopic": "runtime/configuration",
+                      "BrokerTopic": "runtime"
+                    },
+                    {
+                      "DeviceTopic": "runtime/information/messaging",
+                      "BrokerTopic": "runtime"
+                    },
+                    {
+                      "DeviceTopic": "runtime/installation",
+                      "BrokerTopic": "runtime"
+                    },
+                    {
+                      "DeviceTopic": "network",
+                      "BrokerTopic": "network"
+                    },
+                    {
+                      "DeviceTopic": "system/control",
+                      "BrokerTopic": "system"
+                    }
+                  ],
+                  "DeviceOutput": [
+                    {
+                      "DeviceTopic": "runtime/configuration",
+                      "BrokerTopic": "runtime"
+                    },
+                    {
+                      "DeviceTopic": "runtime/information/messaging",
+                      "BrokerTopic": "runtime"
+                    },
+                    {
+                      "DeviceTopic": "runtime/installation",
+                      "BrokerTopic": "runtime"
+                    },
+                    {
+                      "DeviceTopic": "network",
+                      "BrokerTopic": "network"
+                    },
+                    {
+                      "DeviceTopic": "system/control",
+                      "BrokerTopic": "system"
+                    },
+                    {
+                      "DeviceTopic": "log",
+                      "BrokerTopic": "log"
+                    },
+                    {
+                      "DeviceTopic": "data",
+                      "BrokerTopic": "data"
+                    },
+                    {
+                      "DeviceTopic": "heartbeat",
+                      "BrokerTopic": "heartbeat"
+                    },
+                    {
+                      "DeviceTopic": "data/#",
+                      "BrokerTopic": "data"
+                    }
+                  ]
+                }
               }
             ],
             "HeartbeatFormat": "<PlainTimestamp>"
           },
           "ConfigurationVersion": "0.1",
           "ModuleName": "Uplink"
-        },
-        {
-          "ConfigurationData": {
-            "LogForwarding": {
-              "LeastSpecificLogLevel": "INFO"
-            }
-          },
-          "ConfigurationVersion": "0.1",
-          "ModuleName": "DeviceLogger"
         }
       ]
     },
     "ResultType": "SUCCESS"
   },
-  "Tag": "65040870-5470-6126-0389-562163767229",
-  "TimeStamp": 1517922163709
+  "Tag": "11111111-1111-1111-1111-111111111111",
+  "TimeStamp": 1518001128607
 }"""
-
-
 
 extractor = []
 extractor.append('Data')
 extractor.append('ResponseValue')
 extractor.append('ModuleConfigurationData')
+extractor.append('ConfigurationData')
 
 
-extractor_condition = []
-extractor_condition.append('ConfigurationData')
-extractor_condition.append('OpcUa')
+json_schema = """{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Uplink Configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "MqttEndpoints": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/MqttConfiguration"
+      }
+    },
+    "HeartbeatFormat": {
+      "type": "string",
+      "description": "Format string for heartbeat formatting. Replacables (brackets included): <PlainTimestamp> (long / milliseconds since the epoch); <FormattedTimestamp> (string formatted in UTC time)"
+    }
+  },
+  "definitions": {
+    "MqttConfiguration": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "MqttDestinationName": {
+          "type": "string"
+        },
+        "ClientId": {
+          "type": "string"
+        },
+        "MinimalSendIntervalMs": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "Port": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "KeepAliveInterval": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "QoS": {
+          "type": "integer"
+        },
+        "Host": {
+          "type": "string"
+        },
+        "RootTopic": {
+          "type": "string"
+        },
+        "AuthenticationType": {
+          "type": "string"
+        },
+        "Authentication": {
+          "$ref": "#/definitions/AuthenticationConfiguration"
+        },
+        "TopicMappings": {
+          "$ref": "#/definitions/TopicMappings"
+        }
+      },
+      "required": [
+        "MqttDestinationName",
+        "ClientId",
+        "MinimalSendIntervalMs",
+        "Port",
+        "KeepAliveInterval",
+        "QoS",
+        "Host",
+        "RootTopic",
+        "AuthenticationType",
+        "TopicMappings"
+      ]
+    },
+    "AuthenticationConfiguration": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "UserName": {
+          "type": "string"
+        },
+        "Password": {
+          "type": "string"
+        },
+        "DeviceKey": {
+          "type": "string"
+        },
+        "DeviceId": {
+          "type": "string"
+        },
+        "ExpiryTimeSeconds": {
+          "type": "integer"
+        },
+        "UseSsl": {
+          "type": "boolean"
+        },
+        "RootCert": {
+          "type": "string"
+        },
+        "UserCert": {
+          "type": "string"
+        },
+        "UserKey": {
+          "type": "string"
+        }
+      }
+    },
+    "TopicMappings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "DeviceInput": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MappingEntry"
+          }
+        },
+        "DeviceOutput": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/MappingEntry"
+          }
+        }
+      },
+      "required": [
+        "DeviceInput",
+        "DeviceOutput"
+      ]
+    },
+    "MappingEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "DeviceTopic": {
+          "type": "string"
+        },
+        "BrokerTopic": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "DeviceTopic",
+        "BrokerTopic"
+      ]
+    }
+  }
+}"""
+                
+def match_content(_payload, _condition):
+    if len(_condition) == 0:
+        return True
+    else:
+        if type(_payload)== dict:
+            if _condition[0] in _payload.keys():
+                return match_content(_payload[_condition[0]], _condition[1:])
+            else:
+                return False
+        elif type(_payload)== list:
+            return any([match_content(element, _condition) for element in _payload])                                    
+        else:
+            if len(_condition) == 1 and _condition[0] == _payload:
+                return True
+            else:
+                return False
 
-json_schema = """{"$schema":"http://json-schema.org/draft-04/schema#","title":
-                    "Opc Ua Config","type":"object","additionalProperties":false,
-                    "properties":{"ServerName":{"type":"string"},
-                    "RequestedPublishingIntervalMs":{"type":"integer"},
-                    "Host":{"type":"string"},"MaxQueueSize":{"type":"integer"},
-                    "MessageSecurityMode":{"type":"string"},
-                    "Security":{"type":"string"},"Port":{"type":"integer"},
-                    "MaxNotificationsPerPublish":{"type":"integer"}},
-                    "required":["ServerName","RequestedPublishingIntervalMs",
-                    "Host","MaxQueueSize","MessageSecurityMode","Security",
-                    "Port","MaxNotificationsPerPublish"]}"""
-                    
-# def extract_sub_dict(js, extractor):
-#     jo = json.loads(js)
-#     sjonm1 = None        
-#     for k in extractor:
-#         print k
-#         if sjonm1 == None:
-#             if type(jo) == list:
-#                 for element in jo:
-#                     if k in element.keys():  
-#                         sjo = element[k]
-#                     else:
-#                         return None
-#             else:                
-#                 if k in jo.keys():
-#                     sjo = jo[k]                                                                    
-#         else:
-#             if type(sjonm1) == list:
-#                 for element in sjonm1:
-#                     if k in element.keys():  
-#                         sjo = element[k]
-#             else:
-#                 sjo = sjonm1[k]  
-#         sjonm1 = sjo
-#                          
-#     return json.dumps(sjo)
-# 
-# print extract_sub_dict(payload,extractor)
+def check_content(payload, condition):
+    payload_json = json.loads(payload)        
+    return match_content(payload_json, condition)   
 
 def unpack_json_string(js, extractor, extractor_condition=None):        
     def unpack_json_object(_jo,_extractor):        
-        if len(_extractor) == 1:
-            return _jo[_extractor[0]] if _extractor[0] in _jo.keys() else None        
-        elif len(_extractor) == 0:            
-            print 'verkackt'
-            return None
+        #if len(_extractor) == 1:
+            #if type(_jo) == dict:
+            #return _jo[_extractor[0]] if _extractor[0] in _jo.keys() else None
+            #if type(_jo) == list:                                    
+        if len(_extractor) == 0:                        
+            return _jo
         else:
             if type(_jo) == dict:
-                return unpack_json_object(_jo[_extractor[0]] if _extractor[0] in _jo.keys() else None, _extractor[1:])
+                return unpack_json_object(_jo[_extractor[0]] , _extractor[1:]) if _extractor[0] in _jo.keys() else None
             elif type(_jo) == list:
                 for sjo in _jo:
-                    sjro = unpack_json_object(sjo[_extractor[0]] if _extractor[0] in sjo.keys() else None, _extractor[1:])  # jsro = sub json return object
+                    sjro = unpack_json_object(sjo[_extractor[0]] , _extractor[1:]) if _extractor[0] in sjo.keys() else None # jsro = sub json return object
                     if sjro is not None:
                         return sjro
-                return None
-                         
+                return None                         
             else:
                 print 'verkackt'
                 return None
@@ -261,24 +428,23 @@ def unpack_json_string(js, extractor, extractor_condition=None):
         return json.dumps(ejo)
     else:
         if type(ejo) == dict:
-            if unpack_json_object(ejo, extractor_condition) is not None:
+            if match_content(ejo, extractor_condition):
                 return json.dumps(ejo)
             else:
                 return None            
-        elif type(ejo) == list: 
-            for entry in ejo:
-                if unpack_json_object(entry, extractor_condition) is not None:
-                    return json.dumps(entry)
-            return None
+        elif type(ejo) == list:
+            ejod = [element for element in ejo if match_content(element, extractor_condition)]
+            if len(ejod) > 0:
+                return json.dumps(ejod)
+            else:
+                return None                
         else:
             return None      
 
 
-print unpack_json_string(payload, extractor, extractor_condition)
+print unpack_json_string(payload, extractor)
 
-
-# print validate(json.loads(extract_sub_dict(payload, extractor)), json.loads(json_schema))
-# print validate(json.loads(unpack_json_string(payload, extractor)), json.loads(json_schema)) 
+print validate(json.loads(unpack_json_string(payload, extractor)), json.loads(json_schema)) 
 
 
 
